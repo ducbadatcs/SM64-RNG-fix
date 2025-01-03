@@ -2,8 +2,10 @@ import subprocess
 import os
 import sys
 
-XDG_DATA_DIR=os.environ.get("XDG_DATA_HOME") or "~/.local/share"
-ROMS_DIR=os.path.expanduser(os.path.join(XDG_DATA_DIR, "HackerSM64"))
+XDG_DATA_DIR = os.environ.get("XDG_DATA_HOME") or "~/.local/share"
+ROMS_DIR = os.path.expanduser(os.path.join(XDG_DATA_DIR, "HackerSM64"))
+print(XDG_DATA_DIR)
+print(ROMS_DIR)
 
 sha1_LUT = {
     "eu": "4ac5721683d0e0b6bbb561b58a71740845dceea9",
@@ -19,10 +21,12 @@ sha1_swapLUT = {
     "us": "1002dd7b56aa0a59a9103f1fb3d57d6b161f8da7",
 }
 
+
 def get_rom_candidates():
     fileArray = [f for f in os.listdir(os.getcwd()) if os.path.isfile(f)]
     if os.path.exists(ROMS_DIR):
-        fileArray += [os.path.join(ROMS_DIR, f) for f in os.listdir(ROMS_DIR) if os.path.isfile(os.path.join(ROMS_DIR, f))]
+        fileArray += [os.path.join(ROMS_DIR, f) for f in os.listdir(
+            ROMS_DIR) if os.path.isfile(os.path.join(ROMS_DIR, f))]
 
     foundVersions = {}
 
@@ -38,10 +42,10 @@ def get_rom_candidates():
                     foundVersions[k] = f
 
             for k, v in sha1_swapLUT.items():
-                if v == sha1sum: # the ROM is swapped!
+                if v == sha1sum:  # the ROM is swapped!
                     subprocess.run(
                         [
-                            "dd","conv=swab",
+                            "dd", "conv=swab",
                             "if=%s" % f,
                             "of=/tmp/baserom.%s.swapped.z64" % k
                         ],
@@ -57,10 +61,8 @@ if __name__ == "__main__":
     if len(sys.argv) != 2:
         print(f"Usage: {sys.argv[0]} version (us jp eu sh)")
         sys.exit(1)
-    gamelist = get_rom_candidates();
+    gamelist = get_rom_candidates()
     version = sys.argv[1]
 
     if version in gamelist:
         print(gamelist[version])
-
-
