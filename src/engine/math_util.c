@@ -44,7 +44,7 @@ f32 random_float(void) {
 
 // Return either -1 or 1 with a 50:50 chance.
 s32 random_sign(void) {
-    return ((random_u16() >= 0x7FFF) ? 1 : -1);
+    return ((random_u16() & 1) ? 1 : -1);
 }
 
 
